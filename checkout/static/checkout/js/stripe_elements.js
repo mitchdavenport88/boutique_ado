@@ -1,7 +1,6 @@
 /*
     Core logic/payment flow for this comes from here:
     https://stripe.com/docs/payments/accept-a-payment
-
     CSS from here: 
     https://stripe.com/docs/stripe-js
 */
@@ -10,7 +9,6 @@ var stripePublicKey = $('#id_stripe_public_key').text().slice(1, -1);
 var clientSecret = $('#id_client_secret').text().slice(1, -1);
 var stripe = Stripe(stripePublicKey);
 var elements = stripe.elements();
-
 var style = {
     base: {
         color: '#000',
@@ -18,16 +16,15 @@ var style = {
         fontSmoothing: 'antialiased',
         fontSize: '16px',
         '::placeholder': {
-            color: '#AAB7C4'
+            color: '#aab7c4'
         }
     },
     invalid: {
-        color: '#DC3545',
-        iconColor: '#DC3545'
+        color: '#dc3545',
+        iconColor: '#dc3545'
     }
 };
-
-var card = elements.create('card', { style: style });
+var card = elements.create('card', {style: style});
 card.mount('#card-element');
 
 // Handle realtime validation errors on the card element
@@ -38,9 +35,7 @@ card.addEventListener('change', function (event) {
             <span class="icon" role="alert">
                 <i class="fas fa-times"></i>
             </span>
-            <span>
-                ${event.error.message}
-            </span>
+            <span>${event.error.message}</span>
         `;
         $(errorDiv).html(html);
     } else {
@@ -68,7 +63,7 @@ form.addEventListener('submit', function(ev) {
     };
     var url = '/checkout/cache_checkout_data/';
 
-    $.post(url, postData).done(function() {
+    $.post(url, postData).done(function () {
         stripe.confirmCardPayment(clientSecret, {
             payment_method: {
                 card: card,
@@ -88,7 +83,7 @@ form.addEventListener('submit', function(ev) {
             shipping: {
                 name: $.trim(form.full_name.value),
                 phone: $.trim(form.phone_number.value),
-                address:{
+                address: {
                     line1: $.trim(form.street_address1.value),
                     line2: $.trim(form.street_address2.value),
                     city: $.trim(form.town_or_city.value),
